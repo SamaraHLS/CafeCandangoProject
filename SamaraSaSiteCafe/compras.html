@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="siteCafe_p1.css">
+
+    <title>Café Candango - Compras</title>
+
+</head>
+<body>
+    <header>
+        <img src="img/BannerCC.png" style="width: 100%; height: 600px;" alt="banner contendo a logo da Café Candango "/>
+      </header>
+      <nav class="menu">     
+        <a  class="a-menu" href="index.html" target="_blank"> INICIAL </a>
+        <a  class="a-menu" href="historia.html" target="_blank"> HISTÓRIA </a>
+        <a  class="a-menu" href="maquinas.html" target="_blank"> CAFETEIRAS </a>
+        <a  class="a-menu" href="saches.html" target="_blank"> CAPSULAS E SACHÊS </a>
+        <a  class="a-menu" href="compras.html"> COMPRAS </a>
+    </nav>
+    
+    <h1> Dados de Identificação</h1> 
+
+    <form id="formulario">
+
+        <label for="nome">Nome:</label>
+        <input id="nome" type="text" name="nome completo" size="80" placeholder="Digite seu nome completo" required /> 
+    
+        <label for="celular">Telefone:</label>
+        <input id="celular" type="text" name="celular" size="80" placeholder="(00) 12345-6789"  required /> 
+
+        <label for="cpf">CPF:</label>
+        <input id="cpf" type="text" name="cpf" size="80" placeholder="001.122.334-45" required onchange="validateCPF(this.value)" />
+        
+
+        <label for="email">E-mail:</label>
+        <input id="email" type="email" name="email" size="80" placeholder="nomeusuário@gmail.com"  required />
+
+        <label for="nome">Endereço:</label>
+        <input id="endr" type="text" name="endereço" size="80" placeholder="Digite seu endereço" required />
+    
+
+        <label for="Capsulas">Cafeteiras:</label>
+
+        <select id="cafeteira" required onchange="atualizarTotal()">
+
+            <option value="0" disabled selected>Selecione Sua Cafeteira</option>
+            <option value="459.90">Máquina de café krups kp2401 cinza 1500w (R$ 459,90)</option>
+            <option value="359.90">Aerobie 83R01 AeroPress Coffee and Espresso Maker, Gray, 1 to 4 cup (R$ 359,90)</option>
+            <option value="189.90">Cafeteira French Press Preziosa, 350 ml, Bialetti (R$ 189,90)</option>
+            <option value="199.90">Cafeteira Nuova Moka Express 6 Xícaras, 1143, Bialetti (R$ 199,90)</option>
+            <option value="0">Nenhum</option>
+          
+          </select>
+          
+          <label for="Capsulas">Capsulas:</label>
+          
+          <select id="capsula" required onchange="atualizarTotal()">
+          
+            <option value="0" disabled selected>Selecione Sua Capsula</option>
+            <option value="19.90">L'Or, Sontuoso - 10 cápsulas (R$ 19,90)</option>
+            <option value="14.90">Baggio, Gourmet Clássico - 10 cápsulas (R$ 14,90)</option>
+            <option value="18.90">Lavazza, Armonico - 10 cápsulas (R$ 18,90)</option>
+            <option value="10.90">Melitta, Marcatto - 10 cápsulas (R$ 10,90)</option>
+            <option value="0">Nenhum</option>
+          
+          </select>
+          
+          <label for="Sachês">Sachês:</label>
+          
+          <select id="sache" required onchange="atualizarTotal()">
+          
+            <option value="0" disabled selected>Selecione Seu Sachê</option>
+            <option value="39.90">Café Orfeu Clássico em sachê - 20 Unidades (R$ 39,90)</option>
+            <option value="35.90">Café Illy Descafeinado em sachê - 18 Unidades (R$ 35,90)</option>
+            <option value="35.90">Café Illy Torra Média em sachê - 18 Unidades (R$ 35,90)</option>
+            <option value="9.90">Pilão Senseo Intenso - 18 Unidades (R$ 9,90)</option>
+            <option value="0">Nenhum</option>
+          
+          </select>
+          
+          <p>Total: <span id="total">R$ 0,00</span></p>
+          
+          <button class="limpar" onclick="apagarTotal()">Apagar Total</button>
+          
+          <script>
+
+            function validateCPF(cpf) {
+                cpf = cpf.replace(/\D/g, '');
+
+                if (cpf.length !== 11) {
+                alert('CPF inválido! O CPF deve conter 11 dígitos.');
+                return;
+                }
+
+                if (!/^\d+$/.test(cpf)) {
+                alert('CPF inválido! O CPF deve conter apenas dígitos numéricos.');
+                return;
+                }
+
+                const checkDigits = cpf.slice(-2);
+                const cpfDigits = cpf.slice(0, 9);
+
+                let sum = 0;
+                let weight = 10;
+
+                for (let i = 0; i < 9; i++) {
+                sum += cpfDigits[i] * weight;
+                weight--;
+                }
+
+                let verificationDigit1 = 11 - (sum % 11);
+                verificationDigit1 = verificationDigit1 > 9 ? 0 : verificationDigit1;
+
+                sum = 0;
+                weight = 11;
+
+                for (let i = 0; i < 10; i++) {
+                sum += cpfDigits[i] * weight;
+                weight--;
+                }
+
+                let verificationDigit2 = 11 - (sum % 11);
+                verificationDigit2 = verificationDigit2 > 9 ? 0 : verificationDigit2;
+
+
+                alert('CPF válido!');
+            }
+
+            function atualizarTotal() {
+              var valorTotal = 0;
+              var cafeteira = document.getElementById("cafeteira").value;
+              var capsula = document.getElementById("capsula").value;
+              var sache = document.getElementById("sache").value;
+              valorTotal = parseFloat(cafeteira) + parseFloat(capsula) + parseFloat(sache);
+              document.getElementById("total").innerHTML = "R$ " + valorTotal.toFixed(2);
+            }
+          
+            function apagarTotal() {
+                var valorTotal = 0;
+            var cafeteira = document.getElementById("cafeteira").value;
+            var capsula = document.getElementById("capsula").value;
+            var sache = document.getElementById("sache").value;
+            valorTotal = parseInt(cafeteira) + parseInt(capsula) + parseInt(sache);
+            document.getElementById("total").innerHTML = "R$ " + valorTotal.toFixed(2);
+          }
+
+          function apagarTudo() {
+            document.getElementById("cafeteira").selectedIndex = 0;
+            document.getElementById("capsula").selectedIndex = 0;
+            document.getElementById("sache").selectedIndex = 0;
+            atualizarTotal();
+          }
+            
+          function mostrarCamposPagamento() {
+                var formaPagamento = document.getElementById("forma-pagamento").value;
+                if (formaPagamento == "cartao") {
+                document.getElementById("campos-pagamento").style.display = "block";
+                } else {
+                document.getElementById("campos-pagamento").style.display = "none";
+                }
+            }
+           
+            let form = document.getElementById('formulario')
+
+                form.addEventListener('submit', function (e) {
+
+                e.preventDefault()
+
+                let nome = document.getElementById('nome').value
+                let telefone = document.getElementById('celular').value
+                let cpf = document.getElementById('cpf').value
+                let endr = document.getElementById('endr').value
+                let email = document.getElementById('email').value
+                let cafeteira = document.getElementById('cafeteira').value
+                let capsula = document.getElementById('capsula').value
+                let sache = document.getElementById('sache').value
+                let formaPagamento = document.getElementById('forma-pagamento').value
+
+                document.getElementById('tabela').style.visibility = 'visible'
+
+                let local = document.querySelector('#rnl')
+                let casa = document.getElementById('rec')
+
+                let txtlabel
+
+                if (local.checked) {
+                    txtlabel = local.nextElementSibling.textContent
+                } else if (casa.checked) {
+                    txtlabel = casa.nextElementSibling.textContent
+                } else {
+                    txtlabel = ''
+                }
+
+                document.querySelector('#l1').innerHTML = ` ${nome} `
+                document.querySelector('#l2').innerHTML = `${telefone}`
+                document.querySelector('#l3').innerHTML = `${cpf}`
+                document.querySelector('#l4').innerHTML = `${email}`
+                document.querySelector('#l5').innerHTML = `${endr}`
+                document.querySelector('#l6').innerHTML = `${cafeteira}`
+                document.querySelector('#l7').innerHTML = `${capsula}`
+                document.querySelector('#l8').innerHTML = `${sache}`
+                document.querySelector('#l9').innerHTML = `${formaPagamento}`
+                document.querySelector('#l10').innerHTML = txtlabel
+
+            })
+
+
+
+            function removerTabela() {
+                document.getElementById('tabela').style.visibility = 'hidden';
+            }
+
+
+            document.querySelector('#botões-form').children[1].addEventListener('click', removerTabela);
+
+            function verificarBandeiraCartao() {
+  const numCartao = document.getElementById('num-cartao').value;
+  const bandeiraImg = document.getElementById('bandeira-img');
+
+  if (numCartao.startsWith('4')) {
+    bandeiraImg.src = 'img/visa.png';
+  } else if (numCartao.startsWith('51') || numCartao.startsWith('52') || numCartao.startsWith('53') || numCartao.startsWith('54') || numCartao.startsWith('55')) {
+    bandeiraImg.src = 'img/mastercard.png';
+  } else if (numCartao.startsWith('34') || numCartao.startsWith('37')) {
+    bandeiraImg.src = 'img/amex1.png';
+  } else {
+    bandeiraImg.src = '';
+  }
+}
+</script>
+            
+        </script>
+        
+            <br>
+            <label for="forma-pagamento">Forma de pagamento:</label>
+                <select id="forma-pagamento" name="forma-pagamento" onchange="mostrarCamposPagamento()">
+                <option value="pix">Pix</option>
+                <option value="boleto">Boleto</option>
+                <option value="cartao">Cartão</option>
+                </select>
+
+                <div id="campos-pagamento" style="display:none;">
+                    <label for="num-cartao">Número do cartão:</label>
+                    <input id="num-cartao" type="text" name="num-cartao" onkeyup="verificarBandeiraCartao()" />
+                    
+                    <label for="nome-cartao">Nome no cartão:</label>
+                    <input id="nome-cartao" type="text" name="nome-cartao" />
+                    
+                    <label for="validade-cartao">Validade:</label>
+                    <input id="validade-cartao" type="month" name="validade-cartao" />
+                    
+                    <label for="codigo-cartao">Código de segurança:</label>
+                    <input id="codigo-cartao" type="text" name="codigo-cartao" />
+                    
+                    <div id="bandeira-cartao">
+                        <img id="bandeira-img" src="" alt="Bandeira do cartão" class="bandeira-img" />
+                      </div>
+                </div>
+
+    <fieldset>
+
+        <legend>Forma de Entrega:</legend>
+        <input type="radio" name="retirada" value="Receba em Casa" id="rec"> <label>Receba o pedido em Casa</label><br> 
+        <input type="radio" name="retirada" value="Retire na Loja" id="rnl"> <label>Retirar na Loja</label>
+    </fieldset>
+    
+        <label for="msg" >Observações:</label>
+        <textarea id="msg" cols="80" rows="4"></textarea>
+    
+    <div id="botões-form">
+        <input type="submit" name="Encomendar" value="Encomendar" />
+        <input type="reset" name="Cancelar" value="Cancelar" />
+    </div>
+    </section>
+    </form>
+
+    <div id="resultado"> 
+        <table id="tabela">
+        
+        <tr>
+            <th>Nome</th> 
+            <th>Telefone</th>
+            <th>CPF</th>
+            <th>Email</th>
+            <th>Endereço</th>
+            <th>Cafeteira</th>
+            <th>Capsula</th>
+            <th>Sachê</th>
+            <th>Forma de Pagamento</th>
+            <th>Entrega</th>
+
+        </tr>
+
+        <tr> 
+            <td id="l1"></td>
+            <td id="l2"></td>
+            <td id="l3"></td>
+            <td id="l4"></td>
+            <td id="l5"></td>
+            <td id="l6"></td>
+            <td id="l7"></td>
+            <td id="l8"></td>
+            <td id="l9"></td>
+            <td id="l10"></td>
+        
+        </tr>
+        
+
+    </table>
+    </div>
+
+    <footer>     
+      <p> ©️  Desenvolvido por <a href="https://www.instagram.com/samara_hls" target="_blank"> Samara de Sá </a> - 2023 </p> 
+    </footer>
+    
+</body>
+</html>
